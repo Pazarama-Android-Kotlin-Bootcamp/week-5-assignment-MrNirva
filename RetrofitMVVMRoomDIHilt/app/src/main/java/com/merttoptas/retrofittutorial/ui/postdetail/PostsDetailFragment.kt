@@ -15,10 +15,11 @@ import com.merttoptas.retrofittutorial.utils.Constants
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class PostsDetailFragment : Fragment(), OnPostClickListener {
+class PostsDetailFragment : Fragment() {
 
     private lateinit var binding: FragmentPostDetailBinding
     private val viewModel by viewModels<PostDetailViewModel>()
+    private lateinit var post:PostDTO
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -42,18 +43,19 @@ class PostsDetailFragment : Fragment(), OnPostClickListener {
 
             postData?.let { safePostData ->
 
-                val post = PostDTO.fromJson(safePostData)
+                post = PostDTO.fromJson(safePostData)
                 binding.dataHolder = post
-                Log.e("hata2","post ${post.body}")
 
             }
 
         }
 
-    }
+        binding.ivPostImage.setOnClickListener{
+            post.isFavorite = !post.isFavorite
+            viewModel.onFavoritePost(post)
+            binding.dataHolder = post
+        }
 
-    override fun onPostClick(post: PostDTO, favorite: Boolean) {
-        viewModel.onFavoritePost(post)
     }
 
 }
