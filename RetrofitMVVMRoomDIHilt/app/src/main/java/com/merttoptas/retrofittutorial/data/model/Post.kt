@@ -23,7 +23,7 @@ data class PostDTO(
     val userId: Int?,
     val id: Int?,
     val title: String?,
-    val isFavorite: Boolean = false
+    var isFavorite: Boolean = false
 ): Parcelable {
 
     // json convert method

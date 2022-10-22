@@ -21,14 +21,24 @@ class PostsAdapter(private val listener: OnPostClickListener) : ListAdapter<Post
     }
 
     override fun onBindViewHolder(holder: PostViewHolder, position: Int) {
-        holder.bind(getItem(position), listener)
+        holder.bind(getItem(position), listener, this.currentList)
     }
 
     class PostViewHolder(private val binding: ItemPostLayoutBinding) : RecyclerView.ViewHolder(binding.root) {
-        fun bind(post: PostDTO, listener: OnPostClickListener) {
+        fun bind(post: PostDTO, listener: OnPostClickListener, postDTOList: List<PostDTO>) {
             binding.dataHolder = post
+
             binding.ivPostImage.setOnClickListener {
+
+                postDTOList.map {
+                    if(it.id == post.id){
+                        it.isFavorite = !it.isFavorite
+                        binding.dataHolder = it
+                    }
+                }
+
                 listener.onPostClick(post, true)
+
             }
             binding.cardView.setOnClickListener {
                 listener.onPostClick(post, false)
